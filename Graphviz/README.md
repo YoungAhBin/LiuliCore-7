@@ -1,14 +1,18 @@
 Graphviz的python库类似于langgraph，先实例化一个对象，然后不断地给这个实例化对象中增加节点和边，最后经过渲染器渲染就成为需要的图了。
 
-# 实例化对象
-1.g = graphviz.Digraph('AI-G') 
+## 实例化对象
+```python
+g = graphviz.Digraph('AI-G')
+```
 
-# 设置图属性、节点属性、边属性
-2.g.attr(rankdir='LR', fontname='Microsoft YaHei', dpi='600')
-3.g.attr('node', fontname='Microsoft YaHei')
-4.g.attr('edge', fontname='Microsoft YaHei')
+## 设置图属性、节点属性、边属性
+```python
+g.attr(rankdir='LR', fontname='Microsoft YaHei', dpi='600')
+g.attr('node', fontname='Microsoft YaHei')
+g.attr('edge', fontname='Microsoft YaHei')
+```
 
-# 子图的生成（包括子图属性、子图节点属性、子图节点定义）
+## 子图的生成（包括子图属性、子图节点属性、子图节点定义）
 ```python
 with g.subgraph(name='cluster_0') as c:
     c.attr(label='工具链', color='blue')
@@ -16,7 +20,7 @@ with g.subgraph(name='cluster_0') as c:
     c.node('knowledge-ts', shape = "box", label='')
 ```
 
-# 利用html-like语言生成复杂的节点label
+## 利用html-like语言生成复杂的节点label
 ```python
 c.node('auxiliary-ts', shape = "box", 
        label='''<
@@ -60,17 +64,17 @@ g.node('agents-f', shape = "Mrecord",
 >''')
 ```
 
-# 节点的定义
+## 节点的定义
 ```python
 g.node('api-f', shape = "Mrecord", label = '对外 api 服务: FastAPI')
 ```
 
-# 边的定义
+## 边的定义
 ```python
 g.edge('agents-f', 'api-f', label='')
 ```
 
-# 依次定义多个边
+## 依次定义多个边
 ```python
 g.edges([('knowledge-ts', 'agents-f'), 
          ('generative-ts', 'agents-f'),
@@ -80,7 +84,7 @@ g.edges([('knowledge-ts', 'agents-f'),
          ('local-ts', 'agents-f'),])
 ```
 
-# html-like定义的label内端口的引用
+## html-like定义的label内端口的引用
 端口引用连接的节点，shape不能是Mrecord
 ```python
 g.edges([('knowledge-ts:r1', 'agents-f'), 
