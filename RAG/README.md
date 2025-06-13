@@ -1,14 +1,14 @@
-# 该文件夹使用说明
+## 该文件夹使用说明
 1.该文件夹是对openai模型使用案例RAG的整理，把该rag定义的函数分类放在了不同的py文件中，最终自定义了一个rag_tool函数，把所有的函数进行的调用，运行这一个函数就有实现了该RAG定义的全部功能，该函数放在rag_main.py文件中。也就是说，要使用这个RAG只需要调用这一个函数作为工具函数就可以了
 
 2.该RAG是对文档进行拆分成块，然后检索可以用来回答问题的块，对检索到的块可以进行多次拆分，拆分后再次进行检索，得到合适的引用块，并根据检索的块回答问题。最后还会验证回答是否是根据检索到的块进行回答，及检索到的块对回答问题的有效性评级结果
 
 3.以下函数说明，部分说明不能完全对应，因为这是我最开始的简要说明，未做整理，仅供参考
 
-# 安装必要的包
+## 安装必要的包
 1.%pip install tiktoken pypdf nltk openai pydantic --quiet
 
-# load_document函数说明
+## load_document函数说明
 1.下载 NLTK 的句子分割模型 punkt_tab，该模型是英文分句模型，适合于英文，中文要导入jieba库，是最流行的中文分句库
 
 2.定义函数 load_document，它接收一个 PDF 下载地址，返回 PDF 提取出的全部文本内容
@@ -55,7 +55,7 @@
 
 24.再次打印分隔线，标识预览内容结束
 
-# split_into_20_chunks函数说明
+## split_into_20_chunks函数说明
 1.这段代码主要依靠from nltk.tokenize import sent_tokenize导入的这个函数sent_tokenize把文本划分为一个一个的句子列表
 
 2.for sentence in sentences:循环判断当前片段是否大于最小token数且再增加这个句子就大于2倍的最大token数，就结束当前片段，开启新的片段
@@ -64,7 +64,7 @@
 
 4.if len(chunks) > 20:如果最终分的块超过20个，就把所有的句子放在一起，然后平均分配到20个块中
 
-# route_chunks函数说明
+## route_chunks函数说明
 1.该段代码通过4.1模型挑选能够用来回答问题的块，及借助便签薄工具生成并记录挑选理由
 
 2.构建系统提示词
@@ -91,7 +91,7 @@
 
 13.多次循环，并且可以看到前面的挑选理由，就形成了推理过程，可以不断更新挑选理由
 
-# navigate_to_paragraphs函数说明
+## navigate_to_paragraphs函数说明
 1.split_into_20_chunks函数就是把整篇文本分割成小于等于20个块，每个块有一个id，每个块的句子进行了合并
 
 2.route_chunks函数就是在给定的块中挑选能够用来回答问题的块组成新的列表，里面传入了最大深度参数，传入的最大深度是为了在便签薄中可以准确记录时第几次调用route_chunks函数挑选合适的块
@@ -108,7 +108,7 @@
 
 4.最终挑选出来的是块，并不是自然段落
 
-# generate_answer函数说明
+## generate_answer函数说明
 1.调用navigate_to_paragraphs函数对输入文档进行多轮拆分挑选，打印出结果
 
 2.@field_validator('citations')是 Pydantic 2.x 中的字段验证装饰器，被装饰的这个函数validate_citations会在数据模型LegalAnswer创建或者赋值时自动触发，验证字段 citations的合法性，保证必须输出合法的字段，不合法时抛出错误
@@ -119,7 +119,7 @@
 
 5.所以存在一个问题，只有运行这段代码response.output_parsed._valid_citations = valid_citations传入_valid_citations才能验证，而触发验证在response = client.responses.parse，而传入字段在后，所以验证的时候没传入字段，无法进行验证。
 
-# verify_answer函数说明
+## verify_answer函数说明
 1.从所有被选中的段落中，筛选出被模型回答实际引用的段落，并将这些引用段落打印展示出来，供用户参考
 
 2.这段代码会输出在挑选出来的段落中，那些段落被用于回答这次的问题。被用于回答问题的段被存储在一个列表中，但具体有没有不是被挑选的段落倍引用来回答问题，说不清
@@ -132,10 +132,10 @@
 
 6.所以这一块完成了验证，而不是上方的 @field_validator('citations')
 
-# rag_tool函数说明
+## rag_tool函数说明
 1.该函数是对上面所有函数的调用，一个函数把上面定义的所有函数功能组织到了一块，运行一个函数实现所有功能
 
-# 导入库的说明
+## 导入库的说明
 1.导入 requests 模块，用于从网络请求下载 PDF 文件（二进制内容）
 
 2.导入 BytesIO，用于将下载的二进制数据包装成内存中文件对象，供 PDF 解析器使用
