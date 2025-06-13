@@ -1,2 +1,3 @@
 # LiuliCore-7
-self-AI
+self-AI Knowledge Base.
+
