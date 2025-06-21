@@ -1,6 +1,5 @@
 Docker是容器打包工具；Dockerfile是构建容器的蓝图，里面包含构建容器所需的操作系统、系统依赖、python依赖、项目源码、启动命令的拉取代码，及设置环境变量的设置代码；wsl是一个轻量Linux内核，是运行linux容器的壳子，有了wsl，再在wsl中放入linux操作系统，就相当于一个linux服务器就成功了，就可以在上面运行命令了，wsl俗称Windows的linux子系统；由于根据Dockerfile构建镜像，需要让Docker成功拉取西药的环境，需要配置代理太复杂，容器出错，所以，我选在在wsl中安装linux操作系统，然后利用docker命令在wsl上创建容器，配置环境，打包成镜像，分发到云服务器，这样就不用配置代理环境。所以这一块主要介绍的是通过wsl在本地构建好容器，打包成镜像的技术。wsl是windows自带的，由于docker底层依赖的是linux内核，以前都要搭配别的linux虚拟机，现在windows自带的wsl就是linux虚拟机。
 
-
 （以下powershell中执行）
 ## 清理 WSL 子系统
 '''python
