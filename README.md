@@ -22,3 +22,8 @@ self-AI Knowledge Base.
 Graphviz的python库的案例地址：  https://graphviz.readthedocs.io/en/stable/examples.html
 
 ## Docker
+说明：在wsl子系统中准备操作系统、系统依赖、项目依赖、项目源码、设置环境变量，测试，在wsl中测试完全没有问题后，就可以打包成镜像上传到云服务器，因为是docker镜像，所以云服务器也要安装docker，才能打开镜像运行起来。由于要打包成镜像，所以在wsl子系统中最开始配置环境的时候就要先建立一个docker容器，后面才能使用docker commit和docker save保存成镜像。
+
+使用方法：根据cocker文件夹里面的说明文件，一步一步测试建立，这个就实现了在本地一步一步测试建立可以正常运行后再打包成镜像。安装的过程中出错可以随时纠正，能够明显的显示错误。
+
+## Agents
