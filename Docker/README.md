@@ -2,58 +2,60 @@ Docker是容器打包工具；Dockerfile是构建容器的蓝图，里面包含�
 
 （以下powershell中执行）
 ## 清理 WSL 子系统
-'''python
+```python
 Get-AppxPackage *ubuntu* | Remove-AppxPackage
 wsl --unregister Ubuntu
 wsl --unregister Ubuntu-22.04
-'''
+```
 
 ## 安装wsl
-'''python
+```python
 wsl --list --online
 wsl --install -d Ubuntu-22.04
-'''
+```
 
 ## docker中配置安装的子系统
 设置→resource. wsl intergration. 开启Ubuntu-22.04. APPLY & restart
 
 ## 配置 Ubuntu 子系统 在 Docker 的用户权限
-'''python
+```python
 sudo groupadd docker
 sudo usermod -aG docker $USER
 exit
 wsl --shutdown
-'''
+```
 
+（以下在Ubuntu（Ubuntu-22.04）中执行）
 ## 通过 Windows Terminal 启动重新打开Ubuntu（Ubuntu-22.04）,在其中建立容器
-'''python
+```python
 docker run -it --name myapp-setup ubuntu:22.04 /bin/bash
-'''
+```
 
 ## 安装环境依赖，Ubuntu-22.04自带python3
-'''python
+```python
 apt update && apt upgrade -y
 apt install -y python3-pip git curl
-'''
+```
 
-## 复制项目源码进入容器（在powershell中执行）
-'''python
+## 复制项目源码进入容器
+（所有的复制代码进入容器都在powershell中执行，因为linux子系统中无cp这个命令，子系统命令行这个时候无需关闭，只是复制通过PS命令行）
+```python
 docker cp "E:\ComfyUI" myapp-setup:/root/ComfyUI
-'''
+```
 
 ## 安装项目依赖
-'''python
+```python
 cd /root/ComfyUI
 pip3 install -r requirements.txt
-'''
+```
 
 ## 测试项目是否成功运行
-'''python
+```python
 python3 main.py
-'''
+```
 
 ## 设置启动脚本
-'''python
+```python
 cat << 'EOF' > /root/start_comfyui.sh
 #!/bin/bash
 cd /root/ComfyUI
@@ -65,23 +67,23 @@ ls -l /root/start_comfyui.sh
 chmod +x /root/start_comfyui.sh
 
 /root/start_comfyui.sh
-'''
+```
 
 ## 提交镜像并导出
-'''python
+```python
 exit
 docker commit myapp-setup comfyui-image:with-start
 docker save -o comfyui-final.tar comfyui-image:with-start
 cp ~/comfyui-final.tar /mnt/c/Users/传防科电脑/Desktop/
-'''
+```
 
 ## 通过winscp上传tar文件，复制tar文件到桌面，拖移上传就可以了
-'''python
+```python
 cp ~/comfyui-final.tar /mnt/c/Users/传防科电脑/Desktop/
-'''
+```
 
 ## 在云服务器上安装docker
-'''python
+```python
 curl -fsSL https://get.docker.com | bash
 systemctl start docker
 systemctl enable docker
@@ -91,12 +93,13 @@ yum install -y docker
 systemctl start docker
 systemctl enable docker
 docker version
-'''
+```
 
 ## 在云服务器远程连接里面云端执行（由于云服务器自带操作系统的原因，装的是阿里云的podman，所以测试的时候用podman是运行成功的
-'''python
+```python
 docker load -i comfyui-final.tar
 docker run -it --name comfyui-server comfyui-image:with-start ./start_comfyui.sh
+```
 
 podman load -i comfyui-final.tar
 podman run -it --name comfyui-server comfyui-image:with-start /root/start_comfyui.sh
