@@ -1,3 +1,5 @@
+该框架定义了节点，定义了工作流。通过后继节点属性实现了工作流功能，通过shared工作流各个节点共享的上下文实现了节点之间结果的传递，最重要的就是prep、exec、post的定义。整个框架自由且简单，轻量方便部署。
+
 ## BaseNode类
 __init__：里面定义了两个属性，一个参数字典属性，一个后继节点字典属性
 
@@ -37,7 +39,7 @@ start：获取起始节点。传入起始节点，注册起始节点进入起始
 
 get_next_node：传入当前节点和action，从当前节点的后继节点字典属性里面通过action取出后继节点对象    ⭐核心函数
 
-_orch：curr从起始节点属性里面获取起始节点，建立工作流的时候会传入起始节点flow = Flow(start=chat_node)；p从Flow类自BaseNode类继承的参数属性中获取参数，这个参数时工作流的参数，是传入工作流的每一个节点的静态参数，所有节点共享，通用是模型、温度等；while curr循环，curr.set_params(p)先把静态参数设置进每一个节点的参数字典属性里面，last_action = curr._run(shared)然后运行每一个节点，copy.copy(self.get_next_node(curr, last_action))最后通过get_next_node函数获得下一个要运行的节点。由于最后一个节点没有后继节点，也就是不会有self.next(后继节点)给它的后继节点字典属性里面注册后继节点执行这一段代码的时候copy.copy(self.get_next_node(curr, last_action))，get_next_node无法从最后一个节点的后继节点字典属性里面取出后继节点，循环也就中断了，工作流也就结束了；由于运行last_action = curr._run(shared)返回的last_action会影响copy.copy(self.get_next_node(curr, last_action))提取的下一个节点是什么节点，而返回last_action是由_run函数里面的post函数决定的，所以post函数可以决定下一个节点到底是什么节点。
+_orch：curr从起始节点属性里面获取起始节点，建立工作流的时候会传入起始节点flow = Flow(start=chat_node)；p从Flow类自BaseNode类继承的参数属性中获取参数，这个参数时工作流的参数，是传入工作流的每一个节点的静态参数，所有节点共享，通用是模型、温度等；while curr循环，curr.set_params(p)先把静态参数设置进每一个节点的参数字典属性里面，last_action = curr._run(shared)然后运行每一个节点，copy.copy(self.get_next_node(curr, last_action))最后通过get_next_node函数获得下一个要运行的节点。由于最后一个节点没有后继节点，也就是不会有self.next(后继节点)给它的后继节点字典属性里面注册后继节点执行这一段代码的时候copy.copy(self.get_next_node(curr, last_action))，get_next_node无法从最后一个节点的后继节点字典属性里面取出后继节点，循环也就中断了，工作流也就结束了；由于运行last_action = curr._run(shared)返回的last_action会影响copy.copy(self.get_next_node(curr, last_action))提取的下一个节点是什么节点，而返回last_action是由_run函数里面的post函数决定的，所以post函数可以决定下一个节点到底是什么节点。    ⭐核心函数
 
 | 你的理解点                                                         | 是否正确 | 说明                                                                                             |
 | ------------------------------------------------------------------ | -------- | ------------------------------------------------------------------------------------------------ |
@@ -50,3 +52,6 @@ _orch：curr从起始节点属性里面获取起始节点，建立工作流的�
 | `post()` 决定 `last_action` → 控制流程跳转                           | ✅      | 完全正确，`post()` 的返回值即是用于控制流程的 action 标签，比如 `"yes"`、`"no"`、`"retry"` 等          |
 
 ## shared共享上下文
+shared字典会在主程序调用的时候新建，传入工作流，再传入_orch，再传入节点的_run函数，由于它是主程序调用的时候新建的，而且它会传入每一个节点的_run函数里面的prep和post函数，所以它是工作流中每个节点共享的上下文，_exec传入的是prep从shared中提取的参数。
+
+以下各个类都是上面各个类的异步重写和批处理调用，没有其它太大变化。
