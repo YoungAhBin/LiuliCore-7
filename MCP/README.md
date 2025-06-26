@@ -33,4 +33,45 @@ server = subprocess.Popen(
 ClientSession()传入两个读和写函数，创建会话对象。ClientSession()是个会话管理器。
 
 list_tools()方法可以从服务端获取工具说明
+以下是客户端获取工具说明的代码
 ```python
+def mcp_get_tools(server_script_path):
+    """Get available tools from an MCP server.
+    """
+    async def _get_tools():
+        server_params = StdioServerParameters(
+            command="python",
+            args=[server_script_path]
+        )
+        
+        async with stdio_client(server_params) as (read, write):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+                tools_response = await session.list_tools()
+                return tools_response.tools
+    
+    return asyncio.run(_get_tools())
+```
+
+将服务端的工具说明给llm生成function calling结果，以及解析function calling结果提取出tool_name, arguments，下面call_tool()方法所需的参数，由智能体来完成
+
+call_tool()方法可以调用服务端的工具
+以下是客户端调用服务端工具并返回调用结果的代码
+```python
+def mcp_call_tool(server_script_path=None, tool_name=None, arguments=None):
+    """Call a tool on an MCP server.
+    """
+    async def _call_tool():
+        server_params = StdioServerParameters(
+            command="python",
+            args=[server_script_path]
+        )
+        
+        async with stdio_client(server_params) as (read, write):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+                result = await session.call_tool(tool_name, arguments)
+                return result.content[0].text
+    
+    return asyncio.run(_call_tool())
+```
