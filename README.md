@@ -27,3 +27,30 @@ Graphviz的python库的案例地址：  https://graphviz.readthedocs.io/en/stabl
 使用方法：根据cocker文件夹里面的说明文件，一步一步测试建立，这个就实现了在本地一步一步测试建立可以正常运行后再打包成镜像。安装的过程中出错可以随时纠正，能够明显的显示错误。
 
 ## Agents
+官方Github仓库地址： https://github.com/The-Pocket/PocketFlow/tree/main
+
+## MCP
+官方Github仓库地址： https://github.com/modelcontextprotocol/python-sdk
+
+## A2A
+包含协议底层代码的案例地址： https://github.com/The-Pocket/PocketFlow/tree/main/cookbook/pocketflow-a2a
+
+## database
+SQLAlchemy官方地址： https://docs.sqlalchemy.org/en/20/
+
+## auto
+官方Github仓库地址： https://github.com/asweigart
+
+## exec
+
+## Digital humans
+
+## flux(ComfyUI)
+
+## 视频生成(ComfyUI)
+
+## deep research
+
+## LangGraph
+
+## Flutter
