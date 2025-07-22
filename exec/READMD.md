@@ -74,3 +74,6 @@ restricted_globals = {
 exec("print('我可以打印')", restricted_globals)  # ✅ OK
 exec("open('file.txt', 'w')", restricted_globals)  # ❌ 报错：open 不存在
 ```
+
+注意： 根据官方文档，同时传 globals 和 locals（两套作用域），source内定义的函数和类里面使用的变量不是自己定义的，称自由变量，也不能从globals 和 locals中获取，但是实际情况是可以获取的，后续遇到问题从这个角度思考。
+exec("open('file.txt', 'w')", restricted_globals)  # ❌ 报错：open 不存在
