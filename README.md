@@ -42,6 +42,7 @@ SQLAlchemy官方地址： https://docs.sqlalchemy.org/en/20/
 官方Github仓库地址： https://github.com/asweigart
 
 ## exec
+python的内置函数，用于执行代码，官方地址：https://docs.python.org/3/library/functions.html#exec
 
 ## Digital humans
 
