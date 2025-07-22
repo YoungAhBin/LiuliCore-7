@@ -1,0 +1,1 @@
+该库囊括了asweigart 开源的三个仓库，分别是用于控制鼠标键盘的pyautogui库；用于控制顶层可见窗口的PyGetWindow库；用于文本复制粘贴的pyperclip库。
