@@ -44,6 +44,19 @@ SQLAlchemy官方地址： https://docs.sqlalchemy.org/en/20/
 ## exec
 python的内置函数，用于执行代码，官方地址：https://docs.python.org/3/library/functions.html#exec
 
+## Time_Series_Analysis
+SARIMA参考仓库： https://github.com/ajitsingh98/Time-Series-Analysis-and-Forecasting-with-Python
+
+神经网络模型用于时间序列预测的模型TimeFM: https://github.com/google-research/timesfm
+有一个模型微调的jupyter文件，把这个学会就可以了，这个文件里面导入的模块都在scr文件夹里面
+
+## Data_analysis_AI
+抽取pandasai核心： https://github.com/sinaptik-ai/pandas-ai
+主要参考内容在pandasai文件夹的core文件夹，提示词的构建最为重要
+
+## mapreduce
+利用100——line这个agents框架的批处理节点实现map功能，mapreduce的核心就是先把数据分块，每个块分配一个键，把键值对给map函数进行处理，map函数之后可以对每个map的输出进行排序、合并等整理，最后经过reduce对每个map函数的输出统一进行排序、合并等整理并输出。100_line的批处理节点是对普通节点的_exec_函数调用，用_exec_函数循环处理一批一批的数据，返回所有批的处理结果，实现了数据的批处理，而prep函数和post函数并没有变，prep函数实现数据的分块和键值对的定义，post函数对所有批的结果进行统一处理相当于reduce函数，最后都存入shared字典。
+
 ## Digital humans
 
 ## flux(ComfyUI)
