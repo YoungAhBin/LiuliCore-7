@@ -45,14 +45,19 @@ SQLAlchemy官方地址： https://docs.sqlalchemy.org/en/20/
 python的内置函数，用于执行代码，官方地址：https://docs.python.org/3/library/functions.html#exec
 
 ## Time_Series_Analysis
+### SARIMA
 SARIMA参考仓库： https://github.com/ajitsingh98/Time-Series-Analysis-and-Forecasting-with-Python
 
+### TimeFM
 神经网络模型用于时间序列预测的模型TimeFM: https://github.com/google-research/timesfm
+
 有一个模型微调的jupyter文件，把这个学会就可以了，这个文件里面导入的模块都在scr文件夹里面
+
 模型下载地址： https://huggingface.co/google/timesfm-2.0-500m-pytorch
 
 ## Data_analysis_AI
 抽取pandasai核心： https://github.com/sinaptik-ai/pandas-ai
+
 主要参考内容在pandasai文件夹的core文件夹，提示词的构建最为重要
 
 ## mapreduce
