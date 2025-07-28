@@ -1,0 +1,8 @@
+
+{# ----------- 过滤器示例：注册名在 render_prompt.py 里 ----------- #}
+{# 用法：{{ text | markdown }}                                     #}
+
+{# ----------- 宏：格式化消息 ------------------------------------ #}
+{% macro format_msg(role, content, mark='**') -%}
+{{ mark }}[{{ role|upper }}]{{ mark }} {{ content | trim }}
+{%- endmacro %}

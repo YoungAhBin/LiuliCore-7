@@ -1,0 +1,29 @@
+
+{# 基模板：可以被不同任务继承；这里只做演示，直接渲染它本身 #}
+{% import 'macros.jinja2' as m %}
+{% set NL = '\n' -%}
+
+{# ---- 系统提示块 ------------------------------------------------ #}
+{% block system_prompt %}
+{{ m.format_msg(messages[0].role, messages[0].content) }}
+{% endblock %}
+
+{# ---- 历史对话块（循环、loop 变量、空循环 else） -------------- #}
+{% block history %}
+{% for msg in history if msg.role != 'system' -%}
+{{ m.format_msg(msg.role, msg.content) }}{{ NL }}
+{%- else -%}
+(无历史记录){{ NL }}
+{%- endfor %}
+{% endblock %}
+
+{# ---- 用户输入块 ------------------------------------------------ #}
+{% block user_prompt %}
+{{ m.format_msg('USER', user_query) }}
+{% endblock %}
+
+{# ---- 额外指令块 (示范 super() 复用父内容) --------------------- #}
+{% block instructions %}
+{# --------{{ super() }}---------- #}
+请遵循《中国疾控工作规范》回答，答案不少于 200 字。
+{% endblock %}

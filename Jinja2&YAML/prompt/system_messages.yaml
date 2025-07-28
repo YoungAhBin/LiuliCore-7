@@ -1,0 +1,69 @@
+
+# -------------------------------------------------------------------
+# 文档 1：通用元信息 + 默认消息片段（用锚点 &defaults）
+# -------------------------------------------------------------------
+---
+name: disease_control_chat                 # 标量：字符串
+version: 1.0                               # 标量：浮点
+debug: false                               # 标量：布尔
+tags: [llm, prompt, jinja2, yaml]          # 流式序列
+defaults: &defaults                        # 锚点：可复用
+  adapter: postgres
+  host: 127.0.0.1
+  port: 5432
+  pool: 20
+
+# -------------------------------------------------------------------
+# 文档 2：Prompt 定义（每个 prompt 独立一文档，便于批量管理）
+# -------------------------------------------------------------------
+---
+defaults: &defaults                        # 锚点：可复用
+  adapter: postgres
+  host: 127.0.0.1
+  port: 5432
+  pool: 20
+
+# ① 合并键 << 把 &defaults 完整并入数据库配置，然后覆写数据库名
+database:
+  <<: *defaults
+  dbname: prompt_store
+
+# ② Prompt 变量声明
+input_variables: &vars                     # 锚点，后文别名复用
+  - user_query
+  - today
+  - history
+
+# ③ 消息模板列表（演示序列里嵌映射，并引用别名）
+messages: &msg_seq
+  - &sys_msg
+    role: system
+    content: |
+      你是商州区疾控中心的智能助手，
+      需要根据最新《传染病法》(9月1日生效) 进行专业解读。
+  - &assistant_msg
+    role: assistant
+    content: |
+      (此处填充助手回复，占位)
+  - &user_tpl
+    role: user
+    content: >
+      {{ user_query }}   # 这里使用 Jinja2 占位符，折叠块 > 把换行折成空格
+
+# ④ 使用锚点 *vars, *msg_seq 作为配置片段复用
+prompt:
+  vars: *vars
+  messages: *msg_seq
+  few_shot_examples: >
+    [User] 咳嗽要做核酸吗？
+    [Assistant] 如出现发热、咳嗽等症状，应立即进行核酸检测…
+
+# -------------------------------------------------------------------
+# 文档 3：另一份 Prompt，展示多文档 & 锚点作用域独立
+# -------------------------------------------------------------------
+---
+name: "quick_classify_intent"
+template: |
+  请判断下列用户问题的意图类别(仅输出"账单/报修/投诉/建议"):
+  {{ user_query }}
+
