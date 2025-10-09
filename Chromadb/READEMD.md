@@ -1,5 +1,7 @@
 ## 向量数据库的本地部署
 
+使用这个向量数据库，只需要pip安装，就可以import导入，然后使用。
+
 test.py 文件里面进行了简答的测试，和如何本地部署到自己的项目中的方法。
 
 embedding_store.py 是直接复制的mem0项目的向量存储方法接口的封装方法，直接借助这个封装好的对向量数据库的增删改查的方法操作chromadb数据库。官方教程文档：  https://docs.trychroma.com/docs/overview/getting-started
