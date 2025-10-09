@@ -24,3 +24,84 @@ def run_ffmpeg_cmd(args: list[str], folder: str = "."):
     except subprocess.CalledProcessError as e:
         print("命令执行失败:", e.stderr)
 ```
+
+以下是几个示例：
+```python
+# 转换字幕格式
+
+run_ffmpeg_cmd(    
+    ["-i", "model_gene.srt", "output.ass"],
+    folder=r"C:\Users\传防科电脑\Desktop\test"
+)
+
+# 视频添加字幕
+
+run_ffmpeg_cmd(
+    ["-i", "study.mp4", "-vf", "ass=output.ass", "-c:a", "copy", "output.mp4"],
+    folder=r"C:\Users\传防科电脑\Desktop\test"
+)
+
+# 利用混合滤镜给视频添加音频波动图
+
+run_ffmpeg_cmd(
+    [
+        "-i", "output.mp4",          # 作为输入#0：有视频/也有音频
+        "-i", "model_gene.mp3",      # 作为输入#1：仅用于驱动频谱
+
+        "-filter_complex",
+        (
+            "[1:a]showfreqs=s=500x240:mode=bar:ascale=cbrt:fscale=log:win_size=2048:overlap=0.85,"
+            "format=gray[mask];"
+            "color=s=500x240:c=white@1,format=rgba,"
+            "geq="
+              "r='255*0.5*(sin(2*PI*(X/W)        )+1)':"
+              "g='255*0.5*(sin(2*PI*(X/W)+2*PI/3)+1)':"
+              "b='255*0.5*(sin(2*PI*(X/W)+4*PI/3)+1)':"
+              "a='255'[grad];"
+            "[grad][mask]alphamerge[rbars];"
+            "[0:v][rbars]overlay=x=385:y=500:shortest=1[v]"
+        ),
+
+        "-map", "[v]",        # 取滤镜产出的视频
+        "-map", "0:a:0",      # 保留原视频的音轨
+
+        "-c:v", "libx264",
+        "-preset", "medium",
+        "-crf", "18",
+        "-pix_fmt", "yuv420p",
+
+        "-c:a", "copy",       # 音频直拷
+        "-shortest",
+        "spectrum.mp4"
+    ],
+    folder=r"C:\Users\传防科电脑\Desktop\test"
+)
+
+# 屏幕录制
+
+run_ffmpeg_cmd(    
+    [
+        "-f", "gdigrab",
+        
+        "-framerate", "30",
+        
+        "-offset_x", "200", 
+        "-offset_y", "200", 
+        "-video_size", "1280x720", 
+        "-show_region", "1",
+        
+        "-i", "desktop",
+        
+        "-vf", "scale=1920:1080:flags=lanczos",
+        
+        "-c:v", "libx264", 
+        "-b:v", "6000k", 
+        "-pix_fmt", "yuv420p",
+        
+        "-t", "120",
+        
+        "screen.mp4"
+    ],
+    folder=r"C:\Users\传防科电脑\Desktop\test"
+)
+```
